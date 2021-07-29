@@ -1,0 +1,286 @@
+Grammar
+
+    0 $accept: S $end
+
+    1 S: ST1 ';'
+
+    2 ST1: INSERT INTO table '(' attributeList ')' VALUES '(' valuesList ')'
+    3    | INSERT INTO table VALUES '(' valuesList ')'
+
+    4 attributeList: ID ',' attributeList
+    5              | ID
+
+    6 valuesList: ID ',' valuesList
+    7           | NUM ',' valuesList
+    8           | ID
+    9           | NUM
+
+   10 table: ID
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 2 3
+')' (41) 2 3
+',' (44) 4 6 7
+';' (59) 1
+error (256)
+ID (258) 4 5 6 8 10
+NUM (259) 7 9
+INSERT (260) 2 3
+INTO (261) 2 3
+VALUES (262) 2 3
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+S (13)
+    on left: 1, on right: 0
+ST1 (14)
+    on left: 2 3, on right: 1
+attributeList (15)
+    on left: 4 5, on right: 2 4
+valuesList (16)
+    on left: 6 7 8 9, on right: 2 3 6 7
+table (17)
+    on left: 10, on right: 2 3
+
+
+State 0
+
+    0 $accept: . S $end
+
+    INSERT  shift, and go to state 1
+
+    S    go to state 2
+    ST1  go to state 3
+
+
+State 1
+
+    2 ST1: INSERT . INTO table '(' attributeList ')' VALUES '(' valuesList ')'
+    3    | INSERT . INTO table VALUES '(' valuesList ')'
+
+    INTO  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 S: ST1 . ';'
+
+    ';'  shift, and go to state 6
+
+
+State 4
+
+    2 ST1: INSERT INTO . table '(' attributeList ')' VALUES '(' valuesList ')'
+    3    | INSERT INTO . table VALUES '(' valuesList ')'
+
+    ID  shift, and go to state 7
+
+    table  go to state 8
+
+
+State 5
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 6
+
+    1 S: ST1 ';' .
+
+    $default  reduce using rule 1 (S)
+
+
+State 7
+
+   10 table: ID .
+
+    $default  reduce using rule 10 (table)
+
+
+State 8
+
+    2 ST1: INSERT INTO table . '(' attributeList ')' VALUES '(' valuesList ')'
+    3    | INSERT INTO table . VALUES '(' valuesList ')'
+
+    VALUES  shift, and go to state 9
+    '('     shift, and go to state 10
+
+
+State 9
+
+    3 ST1: INSERT INTO table VALUES . '(' valuesList ')'
+
+    '('  shift, and go to state 11
+
+
+State 10
+
+    2 ST1: INSERT INTO table '(' . attributeList ')' VALUES '(' valuesList ')'
+
+    ID  shift, and go to state 12
+
+    attributeList  go to state 13
+
+
+State 11
+
+    3 ST1: INSERT INTO table VALUES '(' . valuesList ')'
+
+    ID   shift, and go to state 14
+    NUM  shift, and go to state 15
+
+    valuesList  go to state 16
+
+
+State 12
+
+    4 attributeList: ID . ',' attributeList
+    5              | ID .
+
+    ','  shift, and go to state 17
+
+    $default  reduce using rule 5 (attributeList)
+
+
+State 13
+
+    2 ST1: INSERT INTO table '(' attributeList . ')' VALUES '(' valuesList ')'
+
+    ')'  shift, and go to state 18
+
+
+State 14
+
+    6 valuesList: ID . ',' valuesList
+    8           | ID .
+
+    ','  shift, and go to state 19
+
+    $default  reduce using rule 8 (valuesList)
+
+
+State 15
+
+    7 valuesList: NUM . ',' valuesList
+    9           | NUM .
+
+    ','  shift, and go to state 20
+
+    $default  reduce using rule 9 (valuesList)
+
+
+State 16
+
+    3 ST1: INSERT INTO table VALUES '(' valuesList . ')'
+
+    ')'  shift, and go to state 21
+
+
+State 17
+
+    4 attributeList: ID ',' . attributeList
+
+    ID  shift, and go to state 12
+
+    attributeList  go to state 22
+
+
+State 18
+
+    2 ST1: INSERT INTO table '(' attributeList ')' . VALUES '(' valuesList ')'
+
+    VALUES  shift, and go to state 23
+
+
+State 19
+
+    6 valuesList: ID ',' . valuesList
+
+    ID   shift, and go to state 14
+    NUM  shift, and go to state 15
+
+    valuesList  go to state 24
+
+
+State 20
+
+    7 valuesList: NUM ',' . valuesList
+
+    ID   shift, and go to state 14
+    NUM  shift, and go to state 15
+
+    valuesList  go to state 25
+
+
+State 21
+
+    3 ST1: INSERT INTO table VALUES '(' valuesList ')' .
+
+    $default  reduce using rule 3 (ST1)
+
+
+State 22
+
+    4 attributeList: ID ',' attributeList .
+
+    $default  reduce using rule 4 (attributeList)
+
+
+State 23
+
+    2 ST1: INSERT INTO table '(' attributeList ')' VALUES . '(' valuesList ')'
+
+    '('  shift, and go to state 26
+
+
+State 24
+
+    6 valuesList: ID ',' valuesList .
+
+    $default  reduce using rule 6 (valuesList)
+
+
+State 25
+
+    7 valuesList: NUM ',' valuesList .
+
+    $default  reduce using rule 7 (valuesList)
+
+
+State 26
+
+    2 ST1: INSERT INTO table '(' attributeList ')' VALUES '(' . valuesList ')'
+
+    ID   shift, and go to state 14
+    NUM  shift, and go to state 15
+
+    valuesList  go to state 27
+
+
+State 27
+
+    2 ST1: INSERT INTO table '(' attributeList ')' VALUES '(' valuesList . ')'
+
+    ')'  shift, and go to state 28
+
+
+State 28
+
+    2 ST1: INSERT INTO table '(' attributeList ')' VALUES '(' valuesList ')' .
+
+    $default  reduce using rule 2 (ST1)
